@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.http import HttpResponse
 from django.urls import reverse 
 import markdown
+import random
 
 from django.contrib.messages import constants as messages
 
@@ -51,11 +52,25 @@ def save_page(request):
                 util.save_entry(title ,content)  
                 # return HttpResponse(content)
                 return HttpResponseRedirect(reverse("entry", args=(title,)) )
-            else:
-                 messages.ERROR
+            # else:
+            #     print="the title is already in the list"
+
 def edit_page(request, title):
-    output=markdown.markdown(util.get_entry(title))
-      
-    return render(request,'Encysclopeia/edit_page.html',{"output":output})
-    #  pass
-     
+    if title:
+        output=markdown.markdown(util.get_entry(title))
+        
+        return render(request,'Encyclopedia/edit_page.html',{"output":output ,"title":title})
+def save_change(request):
+
+    if request.method =='POST':
+            title=request.POST.get('title')
+            content=request.POST.get('content')
+            util.save_entry(title ,content)  
+    return HttpResponseRedirect(reverse("entry", args=(title,)) )
+def random_page(request):
+     entry=util.list_entries()
+     random_entry=random.choice(entry)
+     return HttpResponseRedirect(reverse("entry", args=(random_entry,)) )
+
+    #  return render(request,'Encyclopedia/random_page.html',{"random_entry":random_entry})
+              
