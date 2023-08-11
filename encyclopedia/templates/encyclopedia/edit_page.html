@@ -6,15 +6,15 @@
 
 {% block body %}
     <h1> new page</h1>
-<form action="{% url 'save_page' %}" method="POST">
+<form action="{% url 'save_change' %}" method="POST">
 
     {% csrf_token %}
    
-Title: <input type="text", name="title"> <br>
+Title: <input type="text", value="{{title}}" name="title"> <br>
 <label for="w3review">Review of W3Schools:</label> <br>
 
 <textarea id="w3review" name="content" rows="2" cols="10">
-{{output}}
+{{output}} 
 </textarea>
 <input type="submit">
 </form>
