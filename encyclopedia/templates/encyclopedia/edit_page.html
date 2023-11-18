@@ -11,11 +11,11 @@
     {% csrf_token %}
    
 Title: <input type="text", value="{{title}}" name="title"> <br>
-<label for="w3review">Review of W3Schools:</label> <br>
+<label for="w3review">content:</label> <br>
 
 <textarea id="w3review" name="content" rows="2" cols="10">
 {{output}} 
 </textarea>
-<input type="submit">
+<input type="submit" value="save">
 </form>
 {% endblock %}

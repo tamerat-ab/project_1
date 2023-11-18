@@ -16,17 +16,19 @@ def index(request):
     })
 
 def entry(request, title):
-    #   output=util.get_entry(title)
-      output=markdown.markdown(util.get_entry(title))
+    try:
+        output=markdown.markdown(util.get_entry(title)) 
+        return HttpResponse(output)
+    except:
+       return HttpResponse('the requested page does not exist')
       
-      return HttpResponse(output)
 def search(request):
      list=[]
      if request.method =='GET':
            
 
            title=request.GET.get('enter')
-           if title in util.list_entries():
+           if title.lower() in [x.lower() for x in util.list_entries()]:
         
             # return HttpResponseRedirect(f'wiki/{title}')
             return HttpResponseRedirect(reverse("entry", args=(title,)) )
@@ -35,7 +37,7 @@ def search(request):
                 if title not in util.list_entries():
                         
                     for entry in util.list_entries():
-                        if entry.__contains__(title):
+                        if entry.lower().__contains__(title.lower()):
                             list.append(entry)
                 
                 return render(request, "Encyclopedia/search_result.html", {"list":list} )
@@ -48,12 +50,12 @@ def save_page(request):
     if request.method =='POST':
             title=request.POST.get('title')
             content=request.POST.get('content')
-            if title not in util.list_entries():
+            if title.lower() not in [x.lower() for x in util.list_entries()]:
                 util.save_entry(title ,content)  
                 # return HttpResponse(content)
                 return HttpResponseRedirect(reverse("entry", args=(title,)) )
-            # else:
-            #     print="the title is already in the list"
+            else:
+                return render (request,'Encyclopedia/new_page.html',{'message':'The title already exists'})
 
 def edit_page(request, title):
     if title:
@@ -66,7 +68,8 @@ def save_change(request):
             title=request.POST.get('title')
             content=request.POST.get('content')
             util.save_entry(title ,content)  
-    return HttpResponseRedirect(reverse("entry", args=(title,)) )
+            return HttpResponseRedirect(reverse("entry", args=(title,)) )
+
 def random_page(request):
      entry=util.list_entries()
      random_entry=random.choice(entry)

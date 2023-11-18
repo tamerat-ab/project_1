@@ -6,16 +6,23 @@
 
 {% block body %}
     <h1> new page</h1>
+    <h2>{{message}}</h2>
 <form action="{% url 'save_page' %}" method="POST">
 
     {% csrf_token %}
    
-Title: <input type="text", name="title"> <br>
-<label for="w3review">Review of W3Schools:</label> <br>
+Title: <input type="text"   name="title"> <br>
+<label for="w3review">content:</label> <br>
 
-<textarea id="w3review" name="content" rows="2" cols="10">
-
+<textarea id="review" name="content"type="text" >
+# write heading here
+# A first-level heading
+## A second-level heading
+### A third-level heading
+[reference title](wiki/referencetitle)
+<a href="/edit_page/title">edit</a>
 </textarea>
-<input type="submit">
+
+<input id="submit-btn" value="submit" type="submit">
 </form>
 {% endblock %}
